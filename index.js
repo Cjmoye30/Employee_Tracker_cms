@@ -1,7 +1,7 @@
 // install inquirer and MYSQL pacakges/libraries
 const inquirer = require('inquirer');
 const express = require('express');
-const {viewAllDepartments, viewAllRoles, determineDBQuery} = require('./queries');
+const {determineDBQuery, addDepartment} = require('./queries');
 const cTable = require('console.table');
 
 const app = express();
@@ -16,13 +16,19 @@ const questions = [
         message: "What would you like to do?",
         name: "mainList",
         choices: [
+            // Normal Query Functions used
             "View All Departments",
             "View All Roles",
             "View All Employees",
+
+            // Add Department Queries used
             "Add a Department",
             "Add a Role",
             "Add an Employee",
+
             "Update an Employee Role",
+
+            // End the program
             "Quit"
         ]
     },
@@ -35,7 +41,6 @@ const questions = [
         when: function (answers) {
             return answers.mainList === "Add a Department"
         }
-
     },
 
     // Conditional - End Program
@@ -55,14 +60,21 @@ function runQuestions() {
         .prompt(questions)
         .then((answers) => {
 
-            determineDBQuery(answers.mainList);
-
-            // Ending the program based on input - else run the questions again
-            if (answers.endProgram) {
-                console.log("Byeeeeeee")
-            } else {
-                runQuestions()
-            }
+                if (answers.mainList === "Add a Department") {
+                    addDepartment(answers.addDepartment);
+                    
+                } else {
+                    determineDBQuery(answers.mainList);
+                }
+                // Ending the program based on input - else run the questions again
+                // Adding a timeout function so that the next prompt does not overwrite the previous output in the console.
+                setTimeout(function(){
+                    if (answers.endProgram) {
+                        console.log("Byeeeeeee")
+                    } else {
+                        runQuestions()
+                    }
+                },500)
         })
 }
 

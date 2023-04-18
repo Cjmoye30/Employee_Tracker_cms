@@ -13,14 +13,14 @@ const db = mysql.createConnection(
     console.log(`Connected to the cms_db database.`)
 );
 
-function determineDBQuery (val) {
+// Query Standard Views
+function determineDBQuery(val) {
 
-    switch(val) {
+    switch (val) {
 
         case "View All Departments":
             db.query('SELECT * FROM department', function (err, results) {
                 console.table((results));
-                return results;
             });
             break;
 
@@ -40,4 +40,17 @@ function determineDBQuery (val) {
     }
 }
 
-module.exports = { determineDBQuery };
+// Adding to Database
+function addDepartment (val) {
+
+    // we could use another switch statement based on which of the additions we are needing to use
+    // when the user selects some of the adds - then we use that answer to select the answer of the value input
+    // that input is then passed into this function
+
+    db.query('INSERT INTO department (department_name) VALUES(?)', val, function (err, results) {
+        console.log(`${val} added to Departments Table!`);
+        return results;
+    });
+}
+
+module.exports = { determineDBQuery, addDepartment };
