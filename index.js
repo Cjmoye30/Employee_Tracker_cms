@@ -1,14 +1,6 @@
-// install inquirer and MYSQL pacakges/libraries
 const inquirer = require('inquirer');
-const express = require('express');
-const {determineDBQuery, addDepartment} = require('./queries');
+const {determineDBQuery, addDepartment, addRole} = require('./queries');
 const cTable = require('console.table');
-
-const app = express();
-const PORT = process.env.PORT || 3001;
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 const questions = [
     {
@@ -20,14 +12,18 @@ const questions = [
             "View All Departments",
             "View All Roles",
             "View All Employees",
+            "View All Employees - Full Details",
+            new inquirer.Separator(),
 
             // Add Department Queries used
             "Add a Department",
             "Add a Role",
             "Add an Employee",
+            new inquirer.Separator(),
 
             "Update an Employee Role",
 
+            new inquirer.Separator(),
             // End the program
             "Quit"
         ]
@@ -40,6 +36,32 @@ const questions = [
         name: "addDepartment",
         when: function (answers) {
             return answers.mainList === "Add a Department"
+        }
+    },
+
+    // Conditional - Add Role
+    {
+        type: "input",
+        message: "Please enter the ID of the Department this role will be added to:",
+        name: "addRole_department_id",
+        when: function (answers) {
+            return answers.mainList === "Add a Role"
+        }
+    },
+    {
+        type: "input",
+        message: "Please enter the title of this role:",
+        name: "addRole_title",
+        when: function (answers) {
+            return answers.mainList === "Add a Role"
+        }
+    },
+    {
+        type: "input",
+        message: "Please enter the salary of this role:",
+        name: "addRole_salary",
+        when: function (answers) {
+            return answers.mainList === "Add a Role"
         }
     },
 
@@ -60,6 +82,12 @@ function runQuestions() {
         .prompt(questions)
         .then((answers) => {
 
+            // this could still be used as a switch statement based on the answers selected
+
+            if (answers.addRole_department_id && answers.addRole_title && answers.addRole_salary) {
+                console.log("Add this new role to the DB!!!")
+            }
+
                 if (answers.mainList === "Add a Department") {
                     addDepartment(answers.addDepartment);
                     
@@ -74,12 +102,8 @@ function runQuestions() {
                     } else {
                         runQuestions()
                     }
-                },500)
+                },250)
         })
 }
 
 runQuestions();
-
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});

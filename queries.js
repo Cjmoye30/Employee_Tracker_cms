@@ -37,20 +37,29 @@ function determineDBQuery(val) {
                 return results;
             });
             break;
+
+        case "View All Employees - Full Details":
+            db.query('SELECT * FROM employee JOIN role ON employee.role_id = role.id', function (err, results) {
+                console.table((results));
+                return results;
+            });
+            break;
     }
 }
 
 // Adding to Database
-function addDepartment (val) {
-
-    // we could use another switch statement based on which of the additions we are needing to use
-    // when the user selects some of the adds - then we use that answer to select the answer of the value input
-    // that input is then passed into this function
-
+function addDepartment(val) {
     db.query('INSERT INTO department (department_name) VALUES(?)', val, function (err, results) {
         console.log(`${val} added to Departments Table!`);
-        return results;
+        console.table((results));
     });
 }
 
-module.exports = { determineDBQuery, addDepartment };
+function addRole(dept_id, title, salary) {
+    db.query('INSERT INTO role (department_id, title, salary) VALUES(?, ?, ?)', [dept_id, title, salary], function (err, results) {
+        console.log(`${val} added to Departments Table!`);
+        console.table((results));
+    });
+}
+
+module.exports = { determineDBQuery, addDepartment, addRole };
