@@ -13,7 +13,7 @@ const db = mysql.createConnection(
         database: 'cms_db'
     },
     console.log(`Connected to the cms_db database.`)
-);
+)
 
 // Query Standard Views
 async function determineDBQuery(val) {
@@ -80,10 +80,12 @@ function addRole(dept_id, title, salary) {
 
 // Query all of the roles - get the index from a for loop and push them to an array
 function getAllRoles () {
-    db.query('SELECT title FROM role', function (err, results) {
+    db.query('SELECT id AS value, title AS name FROM role', function (err, results) {
         console.log(results);
         return results;
     })
 }
+
+getAllRoles();
 
 module.exports = { determineDBQuery, addDepartment, addRole, getAllRoles };
