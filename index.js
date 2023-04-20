@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const { determineDBQuery, addDepartment, addRole, getAllRoles, getAllDepartments } = require('./queries');
+const { determineDBQuery, addDepartment, addRole, getAllRoles, getAllDepartments, getAllEmployees, addEmployee, updateEmploee } = require('./queries');
 
 // Importing data for all Roles, Employees, and Departments
 // let getRoleData = async () => {
@@ -22,6 +22,12 @@ const questions = [
     //     name: "dept2",
     //     choices: getAllDepartments
     // },
+    // {
+    //     type: "list",
+    //     message: "Choose a manager:",
+    //     name: "employees2",
+    //     choices: getAllEmployees
+    // },
 
     {
         type: "list",
@@ -33,19 +39,13 @@ const questions = [
             "View All Roles",
             "View All Employees",
 
-            new inquirer.Separator(),
-
             // Queries to Add to Tables
             "Add a Department",
             "Add a Role",
             "Add an Employee",
 
-            new inquirer.Separator(),
-
             // Queries to Modify Tables
             "Update an Employee Role",
-
-            new inquirer.Separator(),
 
             // End the program
             "Quit"
@@ -61,7 +61,7 @@ const questions = [
         }
     },
 
-    // Conditional - Add Role - DONE (MVP)
+    // Conditional - Add Role - DONE (MVP) - add validation
     {
         type: "list",
         message: "Please select the department this role will be added to:",
@@ -88,7 +88,7 @@ const questions = [
         }
     },
 
-    // Conditional - Add an Employee - Can add a more dynamic list of roles to choose from
+    // Conditional - Add an Employee - DONE - add validation
     {
         type: "input",
         message: "Please enter the first name of the new employee.",
@@ -114,8 +114,37 @@ const questions = [
             return answers.mainList === "Add an Employee"
         }
     },
+    {
+        type: "list",
+        message: "Please select this employee's manager",
+        name: "addEmployee_manager",
+        choices: getAllEmployees,
+        when: function (answers) {
+            return answers.mainList === "Add an Employee"
+        }
+    },
 
     // Conditional - Update Employee Role
+    // select an employee to update
+    {
+        type: "list",
+        message: "Please select the employee you whould like to update:",
+        name: "update_employee_name",
+        choices: getAllEmployees,
+        when: function (answers) {
+            return answers.mainList === "Update an Employee Role"
+        }
+    },
+    // select the role to be udpated
+    {
+        type: "list",
+        message: "Please select the new role for this employee",
+        name: "update_employee_role",
+        choices: getAllRoles,
+        when: function (answers) {
+            return answers.mainList === "Update an Employee Role"
+        }
+    },
 
     // Conditional - End Program
     {
@@ -134,16 +163,31 @@ function runQuestions() {
         .prompt(questions)
         .then((answers) => {
 
-            console.log(answers.addRole_department_id);
-
-            // Adding a Role to the Database
+            // Adding a Role to the Database - checking if all answers have been selected before executing
             if (answers.addRole_department_id && answers.addRole_title && answers.addRole_salary) {
                 console.log("Add this new role to the DB!!!");
                 addRole(answers.addRole_department_id, answers.addRole_title, answers.addRole_salary);
 
-            } else if (answers.mainList === "Add a Department") {
+            // Adding an Employee to the Database - checking if all answers have been selected before executing
+            } else if (answers.addEmployee_fn && answers.addEmployee_ln && answers.addEmployee_role_title && answers.addEmployee_manager) {
+                console.log("A new employee needs to be added!");
+                addEmployee(answers.addEmployee_fn, answers.addEmployee_ln, answers.addEmployee_role_title, answers.addEmployee_manager);
+
+            // Updating an Employees role in the database 
+            } else if (answers.update_employee_name && answers.update_employee_role) {
+
+                console.log(answers.update_employee_name);
+                console.log(answers.update_employee_role);
+
+                // console.log("Update employee role!");
+                updateEmploee(answers.update_employee_role, answers.update_employee_name);
+            }
+
+            // Adding a new Department to the Database - 
+            else if (answers.mainList === "Add a Department") {
                 addDepartment(answers.addDepartment);
 
+            // runs the switch to determine which view to display     
             } else {
                 determineDBQuery(answers.mainList);
             }

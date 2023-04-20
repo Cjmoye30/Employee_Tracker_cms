@@ -29,7 +29,6 @@ async function determineDBQuery(val) {
         case "View All Roles":
             db.query('SELECT * FROM role', function (err, results) {
                 console.table((results));
-                return results;
             });
             break;
 
@@ -43,13 +42,6 @@ async function determineDBQuery(val) {
                 }
             });
             break;
-
-        // case "View All Employees":
-        //     db.query('SELECT * FROM employees', function (err, results) {
-        //         console.table((results));
-        //         return results;
-        //     });
-        //     break;
     }
 }
 
@@ -62,7 +54,7 @@ function addDepartment(val) {
 }
 
 // Add to Role Table - DONE
-function addRole(dept_id, title, salary) {
+async function addRole(dept_id, title, salary) {
     db.query('INSERT INTO role (department_id, title, salary) VALUES(?, ?, ?)', [dept_id, title, salary], function (err, results) {
         console.log(`New Role Added!`);
         console.table((results));
@@ -70,9 +62,22 @@ function addRole(dept_id, title, salary) {
 }
 
 // Add to Employee Table - 
-async function addEmployee () {
-
+async function addEmployee (fn, ln, role_id, manager_id) {
+    db.query('INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES(?, ?, ?, ?)', [fn, ln, role_id, manager_id], function (err, results) {
+        console.log(`New Employee Added!`);
+        console.table((results));
+    });
 }
+
+// Update and Employee Role - 
+async function updateEmploee (role_ID, employee_id) {
+    db.query('UPDATE employees SET role_id = ? WHERE id = ?', [role_ID, employee_id], function (err, results) {
+        console.log("Employee updated!");
+        console.table(results)
+    })
+}
+
+// UPDATE employees SET role_id = 1 WHERE id = 2; 
 
 
 // Left to do / ideas:
@@ -89,7 +94,7 @@ async function getAllRoles () {
         name: `${title}`,
         value: id
     }));
-    console.log(roleChoices);
+    // console.log(roleChoices);
     return roleChoices;
 }
 
@@ -100,10 +105,19 @@ async function getAllDepartments () {
         name: `${department_name}`,
         value: id
     }));
-    console.log(deptChoices);
+    // console.log(deptChoices);
     return deptChoices;
 }
 
+// Do the same thing for Employees
+async function getAllEmployees () {
+    const allEmployes = await db.promise().query('SELECT id, CONCAT(first_name, " ", last_name) AS Employee_Name FROM employees')
+    const employeeChoices = allEmployes[0].map(({ id, Employee_Name}) => ({
+        name: `${Employee_Name}`,
+        value: id
+    }));
+    // console.log(employeeChoices);
+    return employeeChoices;
+}
 
-
-module.exports = { determineDBQuery, addDepartment, addRole, getAllRoles, getAllDepartments };
+module.exports = { determineDBQuery, addDepartment, addRole, addEmployee, getAllRoles, getAllDepartments, getAllEmployees, updateEmploee };
