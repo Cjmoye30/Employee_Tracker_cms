@@ -34,7 +34,7 @@ async function determineDBQuery(val) {
             break;
 
         case "View All Employees":
-            db.query('SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, role.title, role.salary AS Role_Salary, employee.manager_id, manager.first_name AS Manager_First_Name, manager.last_name AS Manager_Last_Name FROM employees employee JOIN employees manager ON employee.manager_id = manager.id JOIN role ON employee.role_id = role.id', function (err, results) {
+            db.query('SELECT employee.id, CONCAT(employee.first_name," ", employee.last_name) AS Employee_Full_Name, employee.role_id, role.title, role.salary AS Role_Salary, employee.manager_id, CONCAT(manager.first_name, " ", manager.last_name) AS Manager_Full_Name FROM employees employee JOIN employees manager ON employee.manager_id = manager.id JOIN role ON employee.role_id = role.id', function (err, results) {
                 if(err) {
                     console.log(err)
                 } else{
@@ -53,7 +53,7 @@ async function determineDBQuery(val) {
     }
 }
 
-// Adding to Department Table
+// Adding to Department Table - DONE
 function addDepartment(val) {
     db.query('INSERT INTO department (department_name) VALUES(?)', val, function (err, results) {
         console.log(`${val} added to Departments Table!`);
@@ -61,12 +61,17 @@ function addDepartment(val) {
     });
 }
 
-// Add to Role Table
+// Add to Role Table - DONE
 function addRole(dept_id, title, salary) {
     db.query('INSERT INTO role (department_id, title, salary) VALUES(?, ?, ?)', [dept_id, title, salary], function (err, results) {
-        console.log(`${dept_id} added to Role Table!`);
+        console.log(`New Role Added!`);
         console.table((results));
     });
+}
+
+// Add to Employee Table - 
+async function addEmployee () {
+
 }
 
 
@@ -76,16 +81,8 @@ function addRole(dept_id, title, salary) {
 // add in validation on some of the prompts - max length etc.
 // we can pause dynamically adding items to the array for now and revisit it - it is important to work on the rest of the project and see how much we can get done - can bring this up in office hours
 
-// this is not working :(
-
-// Query all of the roles - get the index from a for loop and push them to an array
-// function getAllRoles () {
-//     db.query('SELECT id AS value, title AS name FROM role', function (err, results) {
-//         console.log(results);
-//         return results;
-//     })
-// }
-
+// Functions which dynamically query Departments, Roles, and Employees after new ones have been added so that they are available in the list as selections
+// this could all be put in another file so that it is not too confusing?
 async function getAllRoles () {
     const role = await db.promise().query('SELECT id, title FROM role')
     const roleChoices = role[0].map(({ id, title}) => ({
@@ -96,4 +93,17 @@ async function getAllRoles () {
     return roleChoices;
 }
 
-module.exports = { determineDBQuery, addDepartment, addRole, getAllRoles };
+// Do the same thing for departments
+async function getAllDepartments () {
+    const dept = await db.promise().query('SELECT id, department_name FROM department')
+    const deptChoices = dept[0].map(({ id, department_name}) => ({
+        name: `${department_name}`,
+        value: id
+    }));
+    console.log(deptChoices);
+    return deptChoices;
+}
+
+
+
+module.exports = { determineDBQuery, addDepartment, addRole, getAllRoles, getAllDepartments };

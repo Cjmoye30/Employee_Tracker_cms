@@ -1,20 +1,27 @@
 const inquirer = require('inquirer');
-const { determineDBQuery, addDepartment, addRole, getAllRoles } = require('./queries');
+const { determineDBQuery, addDepartment, addRole, getAllRoles, getAllDepartments } = require('./queries');
 
-
-const getData = async () => {
-    return await getAllRoles();
- };
-
+// Importing data for all Roles, Employees, and Departments
+// let getRoleData = async () => {
+//     return await getAllRoles();
+// };
+// let getDepartmentData = async () => {
+//     return await getAllDepartments();
+// };
 
 const questions = [
-
-    {
-        type: "list",
-        message: "Choose a role:",
-        name: "roles2",
-        choices: getData
-    },
+    // {
+    //     type: "list",
+    //     message: "Choose a role:",
+    //     name: "roles2",
+    //     choices: getAllRoles
+    // },
+    // {
+    //     type: "list",
+    //     message: "Choose a department:",
+    //     name: "dept2",
+    //     choices: getAllDepartments
+    // },
 
     {
         type: "list",
@@ -54,11 +61,12 @@ const questions = [
         }
     },
 
-    // Conditional - Add Role - Can add a more dynamic list of Departments to choose from
+    // Conditional - Add Role - DONE (MVP)
     {
-        type: "input",
-        message: "Please enter the ID of the Department this role will be added to:",
+        type: "list",
+        message: "Please select the department this role will be added to:",
         name: "addRole_department_id",
+        choices: getAllDepartments,
         when: function (answers) {
             return answers.mainList === "Add a Role"
         }
@@ -98,9 +106,10 @@ const questions = [
         }
     },
     {
-        type: "input",
-        message: "Please enter the role ID of the employee:",
-        name: "addEmployee_role_ID",
+        type: "list",
+        message: "Please select the role of the employee:",
+        name: "addEmployee_role_title",
+        choices: getAllRoles,
         when: function (answers) {
             return answers.mainList === "Add an Employee"
         }
@@ -125,13 +134,13 @@ function runQuestions() {
         .prompt(questions)
         .then((answers) => {
 
-            // this could still be used as a switch statement based on the answers selected to reduce the clutter
+            console.log(answers.addRole_department_id);
 
-            // could i have anything new entered just pushed into an existing array? a workaround
-
+            // Adding a Role to the Database
             if (answers.addRole_department_id && answers.addRole_title && answers.addRole_salary) {
                 console.log("Add this new role to the DB!!!");
                 addRole(answers.addRole_department_id, answers.addRole_title, answers.addRole_salary);
+
             } else if (answers.mainList === "Add a Department") {
                 addDepartment(answers.addDepartment);
 
@@ -154,7 +163,3 @@ function runQuestions() {
 }
 
 runQuestions();
-
-
-
-

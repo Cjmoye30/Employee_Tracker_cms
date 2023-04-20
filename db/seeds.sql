@@ -26,3 +26,4 @@ VALUES
     ('Cambric', 'Moye', 5, 1),
     ('Steve', 'Malarkey', 2, 1),
     ('Monnette', 'Sewell', 3, 3);
+

@@ -25,3 +25,9 @@ CREATE TABLE employees (
     last_Name VARCHAR(30),
     FOREIGN KEY (role_id) REFERENCES role (id)
 );
+
+SELECT
+    *
+FROM
+    role
+    JOIN department ON role.department_id = department.id;
