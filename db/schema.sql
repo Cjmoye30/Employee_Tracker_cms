@@ -1,4 +1,5 @@
 DROP DATABASE IF EXISTS cms_db;
+
 CREATE DATABASE cms_db;
 
 USE cms_db;
@@ -12,21 +13,15 @@ CREATE TABLE role (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     department_id INT,
     title VARCHAR(30),
-    salary DECIMAL(19,2),
-    FOREIGN KEY (department_id)
-    REFERENCES department(id)
+    salary DECIMAL(19, 2),
+    FOREIGN KEY (department_id) REFERENCES department (id)
 );
 
-CREATE TABLE employee (
+CREATE TABLE employees (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    role_id INT,
+    manager_id INT REFERENCES employee(id),
     first_Name VARCHAR(30),
     last_Name VARCHAR(30),
-
-    role_id INT,
-    manager_id INT,
-    FOREIGN KEY (role_id)
-    REFERENCES role(id),
-
-    FOREIGN KEY (manager_id)
-    REFERENCES employee(id)
+    FOREIGN KEY (role_id) REFERENCES role (id)
 );
