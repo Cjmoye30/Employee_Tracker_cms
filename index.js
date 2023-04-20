@@ -12,7 +12,6 @@ const questions = [
             "View All Departments",
             "View All Roles",
             "View All Employees",
-            "View All Employees - test",
 
             new inquirer.Separator(),
 
@@ -120,9 +119,7 @@ function runQuestions() {
             if (answers.addRole_department_id && answers.addRole_title && answers.addRole_salary) {
                 console.log("Add this new role to the DB!!!");
                 addRole(answers.addRole_department_id, answers.addRole_title, answers.addRole_salary);
-            }
-
-            if (answers.mainList === "Add a Department") {
+            } else if (answers.mainList === "Add a Department") {
                 addDepartment(answers.addDepartment);
 
             } else {
@@ -136,7 +133,7 @@ function runQuestions() {
                 } else {
                     runQuestions()
                 }
-            }, 500)
+            }, 250)
         })
 }
 

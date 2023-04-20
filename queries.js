@@ -16,7 +16,7 @@ const db = mysql.createConnection(
 );
 
 // Query Standard Views
-function determineDBQuery(val) {
+async function determineDBQuery(val) {
 
     switch (val) {
 
@@ -33,19 +33,23 @@ function determineDBQuery(val) {
             });
             break;
 
-        case "View All Employees - test":
-            db.query('SELECT * FROM employees JOIN role ON employees.role_id = role.id', function (err, results) {
-                console.table((results));
-                return results;
+        case "View All Employees":
+            db.query('SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, role.title, role.salary AS Role_Salary, employee.manager_id, manager.first_name AS Manager_First_Name, manager.last_name AS Manager_Last_Name FROM employees employee JOIN employees manager ON employee.manager_id = manager.id JOIN role ON employee.role_id = role.id', function (err, results) {
+                if(err) {
+                    console.log(err)
+                } else{
+                    console.table((results));
+                    return results;
+                }
             });
             break;
 
-        case "View All Employees":
-            db.query('SELECT employee.id, employee.first_name, employee.last_name, employee.manager_id, manager.first_name AS Manager_First_Name, manager.last_name AS Manager_Last_Name FROM employees employee JOIN employees manager ON employee.manager_id = manager.id JOIN role ON employees.role_id = role.id', function (err, results) {
-                console.table((results));
-                return results;
-            });
-            break;
+        // case "View All Employees":
+        //     db.query('SELECT * FROM employees', function (err, results) {
+        //         console.table((results));
+        //         return results;
+        //     });
+        //     break;
     }
 }
 

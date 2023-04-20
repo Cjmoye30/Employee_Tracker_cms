@@ -25,19 +25,3 @@ CREATE TABLE employees (
     last_Name VARCHAR(30),
     FOREIGN KEY (role_id) REFERENCES role (id)
 );
-
-
-SELECT
-    employee.id,
-    employee.first_name,
-    employee.last_name,
-    employee.role_id,
-    role.title,
-    role.salary AS Role_Salary,
-    employee.manager_id,
-    manager.first_name AS Manager_First_Name,
-    manager.last_name AS Manager_Last_Name
-FROM
-    employees employee
-    JOIN employees manager ON employee.manager_id = manager.id
-    LEFT JOIN role ON employee.role_id = role.id;
