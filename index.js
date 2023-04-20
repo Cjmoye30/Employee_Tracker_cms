@@ -6,7 +6,7 @@ const questions = [
     {
         type: "list",
         message: "test list",
-        name: "title",
+        name: "id",
         choices: getAllRoles()
 
     },
