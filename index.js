@@ -1,14 +1,19 @@
 const inquirer = require('inquirer');
 const { determineDBQuery, addDepartment, addRole, getAllRoles } = require('./queries');
 
+
+const getData = async () => {
+    return await getAllRoles();
+ };
+
+
 const questions = [
 
     {
         type: "list",
-        message: "test list",
-        name: "id",
-        choices: getAllRoles()
-
+        message: "Choose a role:",
+        name: "roles2",
+        choices: getData
     },
 
     {
@@ -120,7 +125,7 @@ function runQuestions() {
         .prompt(questions)
         .then((answers) => {
 
-            // this could still be used as a switch statement based on the answers selected
+            // this could still be used as a switch statement based on the answers selected to reduce the clutter
 
             // could i have anything new entered just pushed into an existing array? a workaround
 

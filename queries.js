@@ -79,13 +79,21 @@ function addRole(dept_id, title, salary) {
 // this is not working :(
 
 // Query all of the roles - get the index from a for loop and push them to an array
-function getAllRoles () {
-    db.query('SELECT id AS value, title AS name FROM role', function (err, results) {
-        console.log(results);
-        return results;
-    })
-}
+// function getAllRoles () {
+//     db.query('SELECT id AS value, title AS name FROM role', function (err, results) {
+//         console.log(results);
+//         return results;
+//     })
+// }
 
-getAllRoles();
+async function getAllRoles () {
+    const role = await db.promise().query('SELECT id, title FROM role')
+    const roleChoices = role[0].map(({ id, title}) => ({
+        name: `${title}`,
+        value: id
+    }));
+    console.log(roleChoices);
+    return roleChoices;
+}
 
 module.exports = { determineDBQuery, addDepartment, addRole, getAllRoles };
