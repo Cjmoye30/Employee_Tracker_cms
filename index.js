@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const {determineDBQuery, addDepartment, addRole} = require('./queries');
+const { determineDBQuery, addDepartment, addRole } = require('./queries');
 const cTable = require('console.table');
 
 const questions = [
@@ -12,24 +12,27 @@ const questions = [
             "View All Departments",
             "View All Roles",
             "View All Employees",
-            "View All Employees - Full Details",
+            "View All Employees - test",
+
             new inquirer.Separator(),
 
-            // Add Department Queries used
+            // Queries to Add to Tables
             "Add a Department",
             "Add a Role",
             "Add an Employee",
+
             new inquirer.Separator(),
 
+            // Queries to Modify Tables
             "Update an Employee Role",
 
             new inquirer.Separator(),
+
             // End the program
             "Quit"
         ]
     },
-
-    // Conditional - Add Department
+    // Conditional - Add Department - DONE
     {
         type: "input",
         message: "Please enter the name of the department you would like to add.",
@@ -39,7 +42,7 @@ const questions = [
         }
     },
 
-    // Conditional - Add Role
+    // Conditional - Add Role - Can add a more dynamic list of Departments to choose from
     {
         type: "input",
         message: "Please enter the ID of the Department this role will be added to:",
@@ -65,6 +68,34 @@ const questions = [
         }
     },
 
+    // Conditional - Add an Employee - Can add a more dynamic list of roles to choose from
+    {
+        type: "input",
+        message: "Please enter the first name of the new employee.",
+        name: "addEmployee_fn",
+        when: function (answers) {
+            return answers.mainList === "Add an Employee"
+        }
+    },
+    {
+        type: "input",
+        message: "Please enter the last name of the new employee.",
+        name: "addEmployee_ln",
+        when: function (answers) {
+            return answers.mainList === "Add an Employee"
+        }
+    },
+    {
+        type: "input",
+        message: "Please enter the role ID of the employee:",
+        name: "addEmployee_role_ID",
+        when: function (answers) {
+            return answers.mainList === "Add an Employee"
+        }
+    },
+
+    // Conditional - Update Employee Role
+
     // Conditional - End Program
     {
         type: "confirm",
@@ -84,26 +115,33 @@ function runQuestions() {
 
             // this could still be used as a switch statement based on the answers selected
 
+            // could i have anything new entered just pushed into an existing array? a workaround
+
             if (answers.addRole_department_id && answers.addRole_title && answers.addRole_salary) {
-                console.log("Add this new role to the DB!!!")
+                console.log("Add this new role to the DB!!!");
+                addRole(answers.addRole_department_id, answers.addRole_title, answers.addRole_salary);
             }
 
-                if (answers.mainList === "Add a Department") {
-                    addDepartment(answers.addDepartment);
-                    
+            if (answers.mainList === "Add a Department") {
+                addDepartment(answers.addDepartment);
+
+            } else {
+                determineDBQuery(answers.mainList);
+            }
+            // Ending the program based on input - else run the questions again
+            // Adding a timeout function so that the next prompt does not overwrite the previous output in the console.
+            setTimeout(function () {
+                if (answers.endProgram) {
+                    console.log("Byeeeeeee")
                 } else {
-                    determineDBQuery(answers.mainList);
+                    runQuestions()
                 }
-                // Ending the program based on input - else run the questions again
-                // Adding a timeout function so that the next prompt does not overwrite the previous output in the console.
-                setTimeout(function(){
-                    if (answers.endProgram) {
-                        console.log("Byeeeeeee")
-                    } else {
-                        runQuestions()
-                    }
-                },250)
+            }, 500)
         })
 }
 
 runQuestions();
+
+
+
+

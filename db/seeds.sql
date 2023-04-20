@@ -5,26 +5,24 @@ VALUES
     ('Engineering'),
     ('Finance'),
     ('Supply Chain'),
-    ('Farming'),
-    ('Fletching'),
     ('Slayer'),
-    ('Runecrafting'),
     ('Marketing');
+
 
 INSERT INTO
     role (department_id, title, salary)
 VALUES
     (1, 'Lawyer', 20000.00),
-    (7, 'Slayer Master', 500000.00),
-    (7, 'Slayer Noobie', 30000.00),
+    (5, 'Slayer Master', 500000.00),
+    (5, 'Slayer Noobie', 30000.00),
     (3, 'Accountant', 30000.00),
-    (9, 'Web Developer', 90000.00);
+    (6, 'Web Developer', 90000.00);
 
 
 INSERT INTO
-    employee (first_Name, last_Name, role_id, manager_id)
+    employees (first_Name, last_Name, role_id, manager_id)
 VALUES
     ('Ben', 'Affleck', 4, 2),
     ('Cambric', 'Moye', 5, 1),
-    ('Steve', '', 2, 1),
+    ('Steve', 'Malarkey', 2, 1),
     ('Monnette', 'Sewell', 3, 3);
