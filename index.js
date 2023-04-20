@@ -1,8 +1,16 @@
 const inquirer = require('inquirer');
-const { determineDBQuery, addDepartment, addRole } = require('./queries');
-const cTable = require('console.table');
+const { determineDBQuery, addDepartment, addRole, getAllRoles } = require('./queries');
 
 const questions = [
+
+    {
+        type: "list",
+        message: "test list",
+        name: "title",
+        choices: getAllRoles()
+
+    },
+
     {
         type: "list",
         message: "What would you like to do?",
@@ -137,7 +145,7 @@ function runQuestions() {
         })
 }
 
-runQuestions();
+// runQuestions();
 
 
 

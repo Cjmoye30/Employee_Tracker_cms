@@ -76,19 +76,17 @@ function addRole(dept_id, title, salary) {
 // add in validation on some of the prompts - max length etc.
 // we can pause dynamically adding items to the array for now and revisit it - it is important to work on the rest of the project and see how much we can get done - can bring this up in office hours
 
-// get all roles even after updates
 // this is not working :(
 
-// async function getAllRoles () {
-//     db.query('SELECT title AS name FROM role', function (err, results, fields) {
-//         console.log(results);
-//         return json(results);
-//     })
-// }
+const rolesArray = [];
+// Query all of the roles - get the index from a for loop and push them to an array
+function getAllRoles () {
+    db.query('SELECT title FROM role', function (err, results) {
+        for (let i = 0; i < results.length; i ++) {
+            rolesArray.push(results[i].title)
+        }
+        return rolesArray;
+    })
+}
 
-
-// rolesArray();
-
-// get all departments even after updates
-
-module.exports = { determineDBQuery, addDepartment, addRole };
+module.exports = { determineDBQuery, addDepartment, addRole, getAllRoles };
