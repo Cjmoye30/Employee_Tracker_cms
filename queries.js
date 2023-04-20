@@ -78,14 +78,11 @@ function addRole(dept_id, title, salary) {
 
 // this is not working :(
 
-const rolesArray = [];
 // Query all of the roles - get the index from a for loop and push them to an array
 function getAllRoles () {
     db.query('SELECT title FROM role', function (err, results) {
-        for (let i = 0; i < results.length; i ++) {
-            rolesArray.push(results[i].title)
-        }
-        return rolesArray;
+        console.log(results);
+        return results;
     })
 }
 
