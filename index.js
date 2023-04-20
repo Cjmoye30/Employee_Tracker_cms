@@ -143,6 +143,9 @@ function runQuestions() {
                 }
             }, 250)
         })
+        .catch((error) => {
+            console.log(error)
+        })
 }
 
 runQuestions();
