@@ -22,7 +22,7 @@
 
   ### Screenshots: 
 
-  - [Github Live Site](https://drive.google.com/file/d/1OFzr8ErcekWVXvJ5k1X-CHdw-w8U1q5f/view?usp=share_link)
+  - [Video Walkthrough](https://drive.google.com/file/d/1OFzr8ErcekWVXvJ5k1X-CHdw-w8U1q5f/view?usp=share_link)
   
   - Screenshot:
   ![Img 1](/assets/images/employee-tracker-1.png)
