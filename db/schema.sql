@@ -26,9 +26,3 @@ CREATE TABLE employees (
     CONSTRAINT unique_person UNIQUE (first_Name, last_Name),
     FOREIGN KEY (role_id) REFERENCES role (id)
 );
-
-SELECT
-    *
-FROM
-    role
-    JOIN department ON role.department_id = department.id;
