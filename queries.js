@@ -26,13 +26,13 @@ async function determineDBQuery(val) {
             break;
 
         case "View All Roles":
-            db.query('SELECT * FROM role', function (err, results) {
+            db.query('SELECT * FROM role JOIN department ON role.department_id = department.id', function (err, results) {
                 console.table((results));
             });
             break;
 
         case "View All Employees":
-            db.query('SELECT employee.id, CONCAT(employee.first_name," ", employee.last_name) AS Employee_Full_Name, employee.role_id, role.title, role.salary AS Role_Salary, employee.manager_id, CONCAT(manager.first_name, " ", manager.last_name) AS Manager_Full_Name FROM employees employee JOIN employees manager ON employee.manager_id = manager.id JOIN role ON employee.role_id = role.id', function (err, results) {
+            db.query('SELECT employee.id, CONCAT(employee.first_name," ", employee.last_name) AS Employee_Full_Name, employee.role_id AS Role_Title, role.title, role.salary AS Role_Salary, role.department_id, department.department_name, employee.manager_id, CONCAT(manager.first_name, " ", manager.last_name) AS Manager_Full_Name FROM employees employee JOIN employees manager ON employee.manager_id = manager.id JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id', function (err, results) {
 
                 console.table((results));
             });
@@ -49,7 +49,6 @@ function addDepartment(val) {
             db.query('SHOW WARNINGS', function (err, results) { console.log(results[0].Message) });
         } else {
             console.log(`${val} added to Departments Table!`);
-            console.table((results));
         }
     });
 }
@@ -63,7 +62,6 @@ async function addRole(dept_id, title, salary) {
             db.query('SHOW WARNINGS', function (err, results) { console.log(results[0].Message) });
         } else {
             console.log(`${title } added to Roles Table!`);
-            console.table((results));
         }
     });
 }
@@ -77,7 +75,6 @@ async function addEmployee(fn, ln, role_id, manager_id) {
             console.log(err.message)
         } else {
             console.log(`${fn} ${ln} added to the Employee Table!`)
-            console.table((results));
         }
     });
 }
@@ -86,7 +83,6 @@ async function addEmployee(fn, ln, role_id, manager_id) {
 async function updateEmploee(role_ID, employee_id) {
     db.query('UPDATE employees SET role_id = ? WHERE id = ?', [role_ID, employee_id], function (err, results) {
         console.log("Employee updated!");
-        console.table((results));
     })
 }
 
